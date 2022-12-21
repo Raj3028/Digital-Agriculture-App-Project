@@ -30,9 +30,9 @@ const createOrganization = async (req, res) => {
     if (!password) {
       return res.status(400).send({ status: false, message: "Password is mandatory" });
     }
-    if (!isValidPassword(password)) {
-      return res.status(400).send({ status: false, message: "Password is invalid" })
-    }
+    // if (!isValidPassword(password)) {
+    //   return res.status(400).send({ status: false, message: "Password is invalid" })
+    // }
     let encryptedPassword = bcrypt
       .hash(req.body.password, saltRound)
       .then((hash) => {

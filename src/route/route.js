@@ -23,10 +23,10 @@ route.post("/createRegion/:organizationId", middleware.Authenticate, RegionContr
 route.get("/getDetails", middleware.Authenticate, RegionController.getOrganization)
 
 // ============================Update Region========================================================
-route.put("/updateRegion/:organizationId", middleware.Authenticate, middleware.Authorization, RegionController.updateRegion)
+route.put("/updateRegion/:organizationId/:regionId", middleware.Authenticate, middleware.Authorization, RegionController.updateRegion)
 
 // ============================================Delete Region==================================================
-route.delete("/deleteRegion/:organizationId", middleware.Authenticate, middleware.Authorization, RegionController.deleteRegion)
+route.delete("/deleteRegion/:organizationId/:regionId", middleware.Authenticate, middleware.Authorization, RegionController.deleteRegion)
 
 
 

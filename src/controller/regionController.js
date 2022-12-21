@@ -27,17 +27,12 @@ const createRegion = async function (req, res) {
 
     if (data.property) {
       if (!["East", "West", "North", "South"].includes(property.region)) {
-        return res.status(400).send({
-          status: false,
-          Message: "Region must be from {North, South, East, West}",
-        });
+        return res.status(400).send({ status: false, Message: "Region must be from {North, South, East, West}", });
       }
-
     }
 
     let findCrop = await cropModel.findOne({ _id: cropId }).select({ updatedAt: 0, __v: 0, createdAt: 0 });
-    if (!findCrop)
-      return res.status(404).send({ status: false, Message: "This crop is not present in DB." });
+    if (!findCrop) return res.status(404).send({ status: false, Message: "This crop is not present in DB." });
 
     let newRegion = {
       property: property,
@@ -50,7 +45,7 @@ const createRegion = async function (req, res) {
 
   } catch (error) {
 
-    return res.status(500).send({ status: false, Message: error.Message });
+    return res.status(500).send({ status: false, Message: error.message });
   }
 };
 
@@ -58,6 +53,7 @@ const createRegion = async function (req, res) {
 //================================ Get-Data ===============================//
 const getOrganization = async (req, res) => {
   try {
+
     let queryDetail = req.query;
     let data = { isDeleted: false };
     let { region, fieldSize, season, soiltype, cropName } = queryDetail;
@@ -98,7 +94,6 @@ const getOrganization = async (req, res) => {
       let e = await cropModel.find({ "soiltype": soiltype, "season": season });
       return res.status(200).send({ status: true, data: e });
     }
-
     if (season) {
       let fieldSi = await cropModel.find({ "season": season });
       return res.status(200).send({ status: true, data: fieldSi });
@@ -111,7 +106,9 @@ const getOrganization = async (req, res) => {
       let crop = await cropModel.find({ "cropName": cropName });
       return res.status(200).send({ status: true, data: crop });
     }
+
   } catch (error) {
+
     return res.status(500).send({ status: false, msg: error.message });
   }
 };
@@ -121,19 +118,14 @@ const updateRegion = async function (req, res) {
 
   try {
     let data = req.body;
-    let organizationId = req.params.organizationId;
+    let data2 = req.params;
+    let { regionId, organizationId } = data2
+    let { property } = data;
 
-    let { regionId, property } = data;
+    if (!regionId) return res.status(400).send({ status: false, Message: "Please provide the regionId. It's mandatory.", });
+    if (!organizationId) return res.status(400).send({ status: false, Message: "Please provide the organizationId. It's mandatory.", });
 
-    if (!organizationId)
-      return res.status(400).send({ status: false, Message: "Please provide the organizationId. It's mandatory.", });
-
-    if (Object.keys(data).length == 0)
-      return res.status(400).send({ status: false, Message: "Please provide some data for updation.", });
-
-    let findRegion = await regionModel.findOne({ _id: regionId }); //isDeleted tobe added
-    if (!findRegion)
-      return res.status(400).send({ status: false, Message: "This region is not present or might be already deleted.", });
+    if (Object.keys(data).length == 0) return res.status(400).send({ status: false, Message: "Please provide some data for updation.", });
 
     if (data.property) {
       if (!["East", "West", "North", "South"].includes(property.region)) {
@@ -141,20 +133,15 @@ const updateRegion = async function (req, res) {
       }
     }
 
-    let newRegion = {
-      property: property,
-    };
-    let updatedFile = await regionModel.findOneAndUpdate(
-      { _id: regionId },
-      { $set: { property: property } },
-      { new: true }
-    );
+    let updatedFile = await regionModel.findOneAndUpdate({ _id: regionId, isDeleted: false }, { $set: { property: property } }, { new: true });
+    if (!updatedFile)
+      return res.status(400).send({ status: false, Message: `This region: "${regionId}" is not present or might be already deleted.` });
 
     return res.status(200).send({ status: true, Message: "Region is updated", data: updatedFile });
 
   } catch (error) {
 
-    return res.status(500).send({ status: false, Message: error.Message });
+    return res.status(500).send({ status: false, Message: error.message });
   }
 };
 
@@ -163,27 +150,17 @@ const updateRegion = async function (req, res) {
 let deleteRegion = async function (req, res) {
 
   try {
-    let regionId = req.body.regionId;
+    let regionId = req.params.regionId;
 
-    let check = await regionModel.findOne({ _id: regionId, isDeletetd: false });
-    if (!check)
-      return res.status(400).send({ status: false, message: "No region found with this regionId" });
-
-    let is_Deleted = check.isDeleted;
-    if (is_Deleted == true)
-      return res.status(404).send({ status: false, message: "Region is already Deleted " });
-
-    await regionModel.findOneAndUpdate(
-      { _id: regionId },
-      { $set: { isDeleted: true } },
-      { new: true }
-    );
+    let update = await regionModel.findOneAndUpdate({ _id: regionId, isDeleted: false }, { $set: { isDeleted: true } });
+    if (!update)
+      return res.status(404).send({ status: false, message: `No region found with this regionId: "${regionId}" or is already Deleted!` });
 
     return res.status(200).send({ status: true, message: "Region Deleted Successfully" });
 
   } catch (error) {
 
-    return res.status(500).send({ status: false, Message: error.Message });
+    return res.status(500).send({ status: false, Message: error.message });
   }
 };
 

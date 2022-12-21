@@ -40,8 +40,8 @@ const Authorization = async function (req, res, next) {
         if (!isValidObjectId(userId)) return res.status(400).send({ status: false, message: "Organization Id is invalid" });
 
 
-        const checkUserId = await organizationModel.findOne({ "_id": userId, isDeleted: false })
-        console.log(checkUserId)
+        const checkUserId = await organizationModel.findOne({ _id: userId })
+        // console.log(checkUserId)
 
         if (!checkUserId) {
             return res.status(400).send({ status: false, message: "already deleted" })
