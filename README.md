@@ -1,7 +1,27 @@
-# Nodejs_Assignment
+<h1 align="center"> Digital Agriculture App <br /></h1>  
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/49508237/104348350-a5485a80-5527-11eb-854b-b2477bfeb96d.png?" width="500" >
+</p>
+
+## 🌱Agricultural Web Application for FunctionUp Project Assignment Built with Expressjs + Nodejs + MongoDB (MEN)💻
 
 
-#Goal#
+### Install Dependencies
+
+```
+npm install
+
+```
+
+### Run
+
+```
+# Run backend (:3000)
+npm start
+
+```
+
+## Goal
 
 Need to develop an app that offers common functionality for digital agriculture apps (such as
 OAuth-based Single Sign-On, properties, seasons, field records, etc). The API is built on HTTP and is
@@ -11,7 +31,7 @@ also accepts and returns JSON in the HTTP body.
 
 Functional Overview
 
-####General Concepts
+## General Concepts
 
 ->Organization
 An Organization is a master entity that has a set of properties. This entity groups and controls all the
@@ -33,27 +53,27 @@ is specifically the only entity which has an actual polygon that describes its s
 world.
 
 
-Crop Cycle
+## Crop Cycle
 What is a Crop Cycle?
 The Crop Cycle is a generical entity responsible for grouping a list of fields with a crop assigned over
 time.
 
-Crop Cycle Property
+### Crop Cycle Property
 Crop Cycle Property is the association of a Crop Cycle to a property (or part of its fields). This way a
 property can have different cycles running at the same time, depending on the type of crops that are
 cultivated in this property.
 
-Crop Cycle Field
+### Crop Cycle Field
 Crop Cycle Field is a cycle defined to a field of a property. This way the property can have multiple
 cycles assigned depending on how many fields with different crops it has.
 
 
-Crop
+### Crop
 A crop is something that can be grown and harvested extensively for profit or subsistence. E.g:
 Soybean, Cotton, Coffee.
 
 
-####Expectations####
+## Expectations
 - Clean maintainable code
 - Unit tests (TDD would be ideal)
 - Suitable data modelling
